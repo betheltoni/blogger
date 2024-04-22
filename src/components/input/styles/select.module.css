@@ -1,0 +1,6 @@
+.select_wrapper input,
+.select_wrapper input:focus {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
