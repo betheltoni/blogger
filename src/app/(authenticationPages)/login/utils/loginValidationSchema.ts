@@ -13,17 +13,12 @@ export const loginInitialValues: {
   [LOGIN_PASSWORD]: '',
 };
 
-const passwordRule =
-  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+// const passwordRule =
+//   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
 export const loginValidationSchema = Yup.object().shape({
   [LOGIN_EMAIL]: Yup.string()
     .email('Invalid email')
     .required('Please enter your email'),
-  [LOGIN_PASSWORD]: Yup.string()
-    .required('Password is required')
-    .matches(
-      passwordRule,
-      'Password must contain at least 8 characters, one uppercase, one number and one special case character'
-    ),
+  [LOGIN_PASSWORD]: Yup.string().required('Password is required'),
 });

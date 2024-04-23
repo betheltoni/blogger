@@ -1,11 +1,16 @@
 import { Metadata } from 'next';
+import { getServerSession } from 'next-auth';
 import * as React from 'react';
+import { Toaster } from 'react-hot-toast';
 
 import '@/styles/globals.css';
 // !STARTERCONF This is for demo purposes, remove @/styles/colors.css import immediately
 import '@/styles/colors.css';
 
+import { AUTH_OPTIONS } from '@/app/api/auth/[...nextauth]/options';
 import { siteConfig } from '@/constant/config';
+import Providers from '@/providers';
+import { toastOptions } from '@/utils/toast/utils/toastConfig';
 
 // !STARTERCONF Change these default meta
 // !STARTERCONF Look at @/constant/config to change them
@@ -49,14 +54,20 @@ export const metadata: Metadata = {
   // ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession(AUTH_OPTIONS);
   return (
     <html>
-      <body>{children}</body>
+      <Providers session={session}>
+        <body>
+          <Toaster position='top-right' toastOptions={toastOptions} />
+          {children}
+        </body>
+      </Providers>
     </html>
   );
 }

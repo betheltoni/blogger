@@ -1,6 +1,8 @@
 'use client';
 import { useFormik } from 'formik';
-import React from 'react';
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
+import React, { useState } from 'react';
 
 import Button from '@/components/buttons/Button';
 import { Input } from '@/components/input';
@@ -13,13 +15,41 @@ import {
   loginInitialValues,
   loginValidationSchema,
 } from '@/app/(authenticationPages)/login/utils/loginValidationSchema';
+import { handleErrors } from '@/utils/custom-error';
 
 const LoginPage = () => {
+  const [submitting, setSubmitting] = useState(false);
+  const router = useRouter();
   const formik = useFormik({
     initialValues: loginInitialValues,
     validationSchema: loginValidationSchema,
-    onSubmit: () => {
+    onSubmit: async (values) => {
       //logic here
+      setSubmitting(true);
+      try {
+        const result = await signIn('login', {
+          ...values,
+          redirect: false,
+        });
+        router.push('/dashboard');
+        setSubmitting(false);
+        if ((!result || result.error) && result?.error !== undefined) {
+          if (result?.error === 'CredentialsSignin') {
+            (await import('react-hot-toast')).toast.error(
+              'Error!, Something went wrong'
+            );
+            return;
+          }
+          (await import('react-hot-toast')).toast.error(
+            'Error!, Something went wrong'
+          );
+        }
+        formik.resetForm();
+      } catch (error) {
+        handleErrors(error);
+      } finally {
+        setSubmitting(false);
+      }
     },
   });
 
@@ -36,7 +66,7 @@ const LoginPage = () => {
           <p className='text-[32px] font-semibold leading-[44px]'>Log in</p>
           <p className='text-base'>Log in to your blogger account</p>
         </div>
-        <form>
+        <form onSubmit={formik.handleSubmit}>
           <section className='flex flex-col gap-6'>
             <div>
               <Input
@@ -60,6 +90,7 @@ const LoginPage = () => {
             </div>
             <div className=''>
               <Button
+                isLoading={submitting}
                 type='submit'
                 className='flex w-full items-center justify-center py-3 text-center'
               >
