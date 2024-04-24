@@ -49,6 +49,12 @@ export default {
         flicker: 'flicker 3s linear infinite',
         shimmer: 'shimmer 1.3s linear infinite',
       },
+      gridTemplateColumns: {
+        layout: 'max-content 1fr',
+      },
+      gridTemplateRows: {
+        layout: 'max-content 1fr',
+      },
     },
   },
   plugins: [require('@tailwindcss/forms')],

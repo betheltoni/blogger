@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { Open_Sans } from 'next/font/google';
 import { getServerSession } from 'next-auth';
+import NextTopLoader from 'nextjs-toploader';
 import * as React from 'react';
 import { Toaster } from 'react-hot-toast';
 
@@ -70,6 +71,7 @@ export default async function RootLayout({
     <html className={`${openSans.variable}`}>
       <body>
         <Providers session={session}>
+          <NextTopLoader color='#3C688C' />
           <Toaster position='top-right' toastOptions={toastOptions} />
           {children}
         </Providers>
