@@ -1,10 +1,12 @@
 'use client';
 import { useFormik } from 'formik';
-import React from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 
 import Button from '@/components/buttons/Button';
 import { Input } from '@/components/input';
 
+import { useCreateUserMutation } from '@/api/auth';
 import {
   SIGNUP_EMAIL,
   SIGNUP_FIRST_NAME,
@@ -15,13 +17,31 @@ import {
   signupInitialValues,
   signupValidationSchema,
 } from '@/app/(authenticationPages)/signup/utils/signupValidationSchema';
+import { customToast } from '@/utils/toast';
+
+import { CreateUserRequest } from '@/types';
 
 const SignupPage = () => {
+  const [submitting, setSubmitting] = useState(false);
+  const [createUser] = useCreateUserMutation();
+  const router = useRouter();
   const formik = useFormik({
     initialValues: signupInitialValues,
     validationSchema: signupValidationSchema,
-    onSubmit: () => {
+    onSubmit: async (values: CreateUserRequest) => {
       //logic here
+      setSubmitting(true);
+      createUser(values)
+        .unwrap()
+        .then(() => {
+          customToast.success('Success', 'User created successfully');
+          setSubmitting(false);
+          router.push('/login');
+        })
+        .catch((error) => {
+          customToast.success('Error', error.data.message);
+          setSubmitting(false);
+        });
     },
   });
 
@@ -38,7 +58,7 @@ const SignupPage = () => {
           <p className='text-[32px] font-semibold leading-[44px]'>Sign up</p>
           <p className='text-base'>Create an account with blogger</p>
         </div>
-        <form>
+        <form onSubmit={formik.handleSubmit}>
           <section className='flex flex-col gap-6'>
             <div>
               <Input
@@ -82,6 +102,7 @@ const SignupPage = () => {
             </div>
             <div className=''>
               <Button
+                isLoading={submitting}
                 type='submit'
                 className='flex w-full items-center justify-center py-2 text-center'
               >

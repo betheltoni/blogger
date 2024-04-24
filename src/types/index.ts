@@ -11,3 +11,15 @@ export interface IUserObject {
   last_name: string;
   password: string;
 }
+
+export interface CreateUserResponse {
+  user: IUserObject;
+  message: string;
+}
+
+export interface CreateUserRequest {
+  email: string;
+  first_name: string;
+  last_name: string;
+  password: string;
+}

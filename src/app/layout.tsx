@@ -62,12 +62,12 @@ export default async function RootLayout({
   const session = await getServerSession(AUTH_OPTIONS);
   return (
     <html>
-      <Providers session={session}>
-        <body>
+      <body>
+        <Providers session={session}>
           <Toaster position='top-right' toastOptions={toastOptions} />
           {children}
-        </body>
-      </Providers>
+        </Providers>
+      </body>
     </html>
   );
 }
