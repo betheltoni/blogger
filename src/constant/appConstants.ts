@@ -15,3 +15,6 @@ export const PATCH_METHOD = 'PATCH';
 //auth paths
 export const LOGIN_PATH = '/user/login';
 export const SIGNUP_PATH = '/user/signup';
+
+//blog paths
+export const MY_POSTS_PATH = '/myblog';
