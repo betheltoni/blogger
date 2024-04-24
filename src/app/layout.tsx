@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { Open_Sans } from 'next/font/google';
 import { getServerSession } from 'next-auth';
 import * as React from 'react';
 import { Toaster } from 'react-hot-toast';
@@ -54,6 +55,11 @@ export const metadata: Metadata = {
   // ],
 };
 
+const openSans = Open_Sans({
+  subsets: ['latin'],
+  variable: '--font-open-sans',
+});
+
 export default async function RootLayout({
   children,
 }: {
@@ -61,7 +67,7 @@ export default async function RootLayout({
 }) {
   const session = await getServerSession(AUTH_OPTIONS);
   return (
-    <html>
+    <html className={`${openSans.variable}`}>
       <body>
         <Providers session={session}>
           <Toaster position='top-right' toastOptions={toastOptions} />
