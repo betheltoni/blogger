@@ -1,4 +1,3 @@
-import { Search } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -22,14 +21,8 @@ const TopNavigation = () => {
         placeholder='Search'
       />
       <div className='flex items-center gap-6'>
-        <div className='inline md:hidden'>
-          <Search size={24} />
-        </div>
-        <div>
-          <p className='underline'>Contact support</p>
-        </div>
         <div className=''>
-          <CiLogout size={24} color='#14241C' />
+          <CiLogout size={24} color='#F41818' />
         </div>
       </div>
     </div>
