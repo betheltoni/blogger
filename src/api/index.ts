@@ -33,16 +33,21 @@ const axiosBaseQuery =
   async ({ url, method, data, params }) => {
     try {
       const session = await getSession();
-      const token = session && session.token;
+      const token = session && session.user.token;
+      const skip = ['/user/signup'];
 
       const result = await axios({
         url: baseUrl + url,
         method,
         data,
         params,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        ...(skip.includes(url)
+          ? {}
+          : {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }),
         timeout: AXIOS_TIMEOUT_TIME,
         timeoutErrorMessage: AXIOS_TIMEOUT_MSG,
       });

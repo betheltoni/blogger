@@ -60,10 +60,7 @@ export interface IBlogObject {
 }
 
 export interface IGetMyPostsParams extends IFetchQueryParams {
-  query?: {
-    state?: string;
-    author?: string;
-  };
+  state?: string;
 }
 
 export interface getMyPostsResponse {

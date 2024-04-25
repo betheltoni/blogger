@@ -21,7 +21,7 @@ const postApi = globalApi.injectEndpoints({
       query: (params) => ({
         url: MY_POSTS_PATH,
         method: GET_METHOD,
-        params,
+        params: params,
       }),
     }),
     getMyPostsById: build.query<getMyPostsResponse, string>({

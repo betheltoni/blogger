@@ -1,19 +1,10 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+import { IBlogObject } from '@/types';
+
 export type PostsTableProps = {
-  elements: {
-    _id: string;
-    title: string;
-    description: string;
-    author: string;
-    state: string;
-    read_count: number;
-    reading_time: number;
-    tags: string[];
-    body: string;
-    timeStamp: string;
-  }[];
+  elements: IBlogObject[];
 };
 
 const PostsTable = ({ elements }: PostsTableProps) => {
@@ -37,7 +28,10 @@ const PostsTable = ({ elements }: PostsTableProps) => {
         <p className='text-[14px] font-medium'>{element.state}</p>
       </td>
       <td>
-        <p className='text-[14px] font-medium'>{element.author}</p>
+        <p className='text-[14px] font-medium'>
+          {element.author.first_name}
+          {element.author.last_name}
+        </p>
       </td>
       <td>
         <p className='text-[14px] font-medium'>{element.read_count}</p>

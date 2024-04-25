@@ -8,44 +8,26 @@ import useModal from '@/components/modal/useModal';
 import Tab from '@/components/tab';
 import useTab from '@/components/tab/useTab';
 
+import { useGetMyPostsQuery } from '@/api/posts';
 import CreatePostModal from '@/app/(authenticatedPages)/posts/components/CreatePostModal';
 import PostsTable from '@/app/(authenticatedPages)/posts/components/PostsTable';
 import { POSTS_TAB } from '@/app/(authenticatedPages)/posts/utils/constants';
+import { DEFAULT_FETCH_QUERY_PARAMS } from '@/constant/appConstants';
 
 const PostsPage = () => {
+  //get posts
+  const { data: publishedPosts } = useGetMyPostsQuery(
+    DEFAULT_FETCH_QUERY_PARAMS
+  );
+  const { data: draftPosts } = useGetMyPostsQuery({
+    ...DEFAULT_FETCH_QUERY_PARAMS,
+    state: 'draft',
+  });
   const postsTab = useTab({ query: 'users', tabs: POSTS_TAB });
   const createPostModal = useModal('create-post');
   const TAB_MAPPER: Record<PostsTab, React.ReactNode> = {
-    published: (
-      <PostsTable
-        elements={new Array(10).fill({
-          title: 'Test Title',
-          description: 'Test Description',
-          author: 'Test Author',
-          state: 'Published',
-          read_count: 0,
-          reading_time: 0,
-          tags: ['tag1', 'tag2'],
-          body: 'Test Body',
-          timeStamp: '2022-01-01',
-        })}
-      />
-    ),
-    drafts: (
-      <PostsTable
-        elements={new Array(10).fill({
-          title: 'Test Title',
-          description: 'Test Description',
-          author: 'Test Author',
-          state: 'Drafts',
-          read_count: 0,
-          reading_time: 0,
-          tags: ['tag1', 'tag2'],
-          body: 'Test Body',
-          timeStamp: '2022-01-01',
-        })}
-      />
-    ),
+    published: <PostsTable elements={publishedPosts?.blogs || []} />,
+    drafts: <PostsTable elements={draftPosts?.blogs || []} />,
   };
   return (
     <div className=' text-primary-text flex flex-col gap-5'>

@@ -6,8 +6,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html>
-      <body>
+    <section>
+      <div>
         <div className='ml-4 mt-4'>
           <Image
             src='/svg/blogger-logo.svg'
@@ -23,7 +23,7 @@ export default function RootLayout({
             &copy; Betheltoni {new Date().getFullYear()}. All rights Reserved
           </div>
         </div>
-      </body>
-    </html>
+      </div>
+    </section>
   );
 }

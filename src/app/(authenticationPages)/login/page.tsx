@@ -92,7 +92,7 @@ const LoginPage = () => {
               <Button
                 isLoading={submitting}
                 type='submit'
-                className='flex w-full items-center justify-center py-3 text-center'
+                className='bg-primary-100 flex w-full items-center justify-center py-3 text-center'
               >
                 Log in
               </Button>

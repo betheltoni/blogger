@@ -1,3 +1,5 @@
+import { IFetchQueryParams } from '@/types';
+
 export const AXIOS_TIMEOUT_TIME = 30000;
 export const AXIOS_TIMEOUT_MSG = 'Request Timeout';
 export const TOKEN_EXPIRED_MSG = 'session expired. please login again';
@@ -18,3 +20,10 @@ export const SIGNUP_PATH = '/user/signup';
 
 //blog paths
 export const MY_POSTS_PATH = '/myblog';
+
+export const DEFAULT_FETCH_QUERY_PARAMS: IFetchQueryParams = {
+  limit: 10,
+  page: 1,
+  sort: ['timeStamp'],
+  search: '',
+};
