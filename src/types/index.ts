@@ -70,6 +70,10 @@ export interface getMyPostsResponse {
   totalPages: number;
   page: number;
 }
+export interface getMyPostResponse {
+  message: string;
+  blog: IBlogObject;
+}
 
 export interface CreatePostRequest {
   [CREATE_POST_TITLE]: string;

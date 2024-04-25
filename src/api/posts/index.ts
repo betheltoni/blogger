@@ -5,11 +5,13 @@ import {
   MY_POSTS_PATH,
   PATCH_METHOD,
   POST_METHOD,
+  POSTS_PATH,
   PUT_METHOD,
 } from '@/constant/appConstants';
 
 import {
   CreatePostRequest,
+  getMyPostResponse,
   getMyPostsResponse,
   IGetMyPostsParams,
   updateMyPostRequest,
@@ -24,7 +26,7 @@ const postApi = globalApi.injectEndpoints({
         params: params,
       }),
     }),
-    getMyPostsById: build.query<getMyPostsResponse, string>({
+    getMyPostsById: build.query<getMyPostResponse, string>({
       query: (id) => ({
         url: `${MY_POSTS_PATH}/${id}`,
         method: GET_METHOD,
@@ -51,7 +53,7 @@ const postApi = globalApi.injectEndpoints({
     }),
     createPost: build.mutation<getMyPostsResponse, CreatePostRequest>({
       query: (data) => ({
-        url: MY_POSTS_PATH,
+        url: POSTS_PATH,
         method: POST_METHOD,
         data,
       }),

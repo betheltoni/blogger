@@ -1,6 +1,7 @@
 'use client';
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
 
 import { useQueryString } from '@/hooks/useQueryString';
@@ -10,6 +11,7 @@ import { Input, MultiLine } from '@/components/input';
 import Modal from '@/components/modal';
 import useModal from '@/components/modal/useModal';
 
+import { useGetMyPostsByIdQuery, useUpdateMyPostMutation } from '@/api/posts';
 import {
   CREATE_POST_BODY,
   CREATE_POST_DESCRIPTION,
@@ -20,19 +22,44 @@ import {
   createPostInitialValues,
   createPostValidationSchema,
 } from '@/app/(authenticatedPages)/posts/utils/postValidationSchema';
+import { handleErrors } from '@/utils/custom-error';
+import { customToast } from '@/utils/toast';
 
 const EditPostModal = () => {
   const editPost = useModal('edit-post');
-  const { getQueryString } = useQueryString();
-  const [tags, setTags] = useState<string[]>([]);
+  const { getQueryString, pathname } = useQueryString();
+  const blogId = String(pathname.split('/').pop());
+  const { data: post } = useGetMyPostsByIdQuery(blogId as string);
+  const defaultTags: string[] = post?.blog?.tags ?? [];
+  const [tags, setTags] = useState<string[]>(defaultTags);
   const [submitting, setSubmitting] = useState(false);
+  const [updateMyPost] = useUpdateMyPostMutation();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (post && post.blog && post.blog.tags) {
+      setTags(post.blog.tags);
+    }
+  }, [post]);
+
   const formik = useFormik({
     initialValues: createPostInitialValues,
     validationSchema: createPostValidationSchema,
-    onSubmit: async () => {
+    onSubmit: async (values) => {
       //logic here
       setSubmitting(true);
-      setSubmitting(false);
+      try {
+        await updateMyPost({ _id: blogId, ...values, tags }).unwrap();
+        customToast.success('Success', 'blog updated successfully');
+        setSubmitting(false);
+        editPost.handleCloseModal();
+        router.push('/posts');
+      } catch (error) {
+        handleErrors(error);
+        customToast.error('Error', 'Error updating blog');
+      } finally {
+        setSubmitting(false);
+      }
     },
   });
 
@@ -62,7 +89,7 @@ const EditPostModal = () => {
               id={CREATE_POST_TITLE}
               type='text'
               label='Title'
-              placeholder='Title'
+              placeholder={post?.blog?.title || 'Enter title'}
               inputClassName='bg-[#F2F4F7]'
               {...getFormikPropsInput(CREATE_POST_TITLE)}
             />
@@ -72,7 +99,7 @@ const EditPostModal = () => {
               id={CREATE_POST_DESCRIPTION}
               type='text'
               label='Description'
-              placeholder='Description'
+              placeholder={post?.blog?.description || 'Enter description'}
               inputClassName='bg-[#F2F4F7]'
               {...getFormikPropsInput(CREATE_POST_DESCRIPTION)}
             />
@@ -117,7 +144,7 @@ const EditPostModal = () => {
             <MultiLine
               id={CREATE_POST_BODY}
               label='Body'
-              placeholder='Body of the post'
+              placeholder={post?.blog?.body}
               {...getFormikPropsInput(CREATE_POST_BODY)}
               rows={5}
               inputClassName='bg-[#F2F4F7]'

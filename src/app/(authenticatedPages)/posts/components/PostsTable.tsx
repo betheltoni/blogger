@@ -29,8 +29,7 @@ const PostsTable = ({ elements }: PostsTableProps) => {
       </td>
       <td>
         <p className='text-[14px] font-medium'>
-          {element.author.first_name}
-          {element.author.last_name}
+          {element.author.first_name} {element.author.last_name}
         </p>
       </td>
       <td>

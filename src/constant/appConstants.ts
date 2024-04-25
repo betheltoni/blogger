@@ -20,6 +20,7 @@ export const SIGNUP_PATH = '/user/signup';
 
 //blog paths
 export const MY_POSTS_PATH = '/myblog';
+export const POSTS_PATH = '/blog';
 
 export const DEFAULT_FETCH_QUERY_PARAMS: IFetchQueryParams = {
   limit: 10,

@@ -1,5 +1,6 @@
 'use client';
 import { useFormik } from 'formik';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { IoIosCloseCircleOutline } from 'react-icons/io';
 
@@ -10,6 +11,7 @@ import { Input, MultiLine } from '@/components/input';
 import Modal from '@/components/modal';
 import useModal from '@/components/modal/useModal';
 
+import { useCreatePostMutation } from '@/api/posts';
 import {
   CREATE_POST_BODY,
   CREATE_POST_DESCRIPTION,
@@ -20,19 +22,34 @@ import {
   createPostInitialValues,
   createPostValidationSchema,
 } from '@/app/(authenticatedPages)/posts/utils/postValidationSchema';
+import { handleErrors } from '@/utils/custom-error';
+import { customToast } from '@/utils/toast';
 
 const CreatePostModal = () => {
   const createPost = useModal('create-post');
+  const router = useRouter();
   const { getQueryString } = useQueryString();
   const [tags, setTags] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [createMyPost] = useCreatePostMutation();
   const formik = useFormik({
     initialValues: createPostInitialValues,
     validationSchema: createPostValidationSchema,
-    onSubmit: async () => {
+    onSubmit: async (values) => {
       //logic here
       setSubmitting(true);
-      setSubmitting(false);
+      try {
+        await createMyPost({ ...values, tags }).unwrap();
+        customToast.success('Success', 'blog created successfully');
+        setSubmitting(false);
+        createPost.handleCloseModal();
+        router.push('/posts');
+      } catch (error) {
+        handleErrors(error);
+        customToast.error('Error', 'Error creating blog');
+      } finally {
+        setSubmitting(false);
+      }
     },
   });
 
